@@ -38,6 +38,7 @@ const registerUser = asyncHandler(async(req,res)=>{
     const {fullname,email,username,password}=req.body
     console.log("email :",email);
     console.log("Body :",req.body);
+    console.log("req :",req);
     // if (fullname==""){
     //     throw new ApiError(400,"FullName is Required :")
 
@@ -115,14 +116,14 @@ const loginUser =asyncHandler(async(req,res)=>{
     })
 
     if (!user) {
-        new ApiError(404,"User does not exist.")
+       throw  new ApiError(404,"User does not exist.")
     }
 
     console.log("hi:",password)
     const isPasswordValid = await user.isPasswordCorrect(password)
 
     if (!isPasswordValid) {
-        new ApiError(401,"Invalid User Credentials.")
+       throw new ApiError(401,"Invalid User Credentials.")
     }
 
     const {accessToken,refreshToken} = await generateAcessAndRefreshTokens(user._id)
