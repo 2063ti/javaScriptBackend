@@ -131,6 +131,10 @@ const loginUser =asyncHandler(async(req,res)=>{
     const loggedInUser = await User.findById(user._id).
     select("-password -refreshToken")
 
+
+    if (!loggedInUser) {
+        throw new ApiError(401,"Invalid loggedInUser.")
+     }
     const options = {
         httpOnly : true,
         secure:true
