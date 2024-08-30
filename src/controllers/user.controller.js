@@ -234,7 +234,7 @@ const changeCurrentPassword = asyncHandler(async(req,res)=>{
     const isPasswordCorrect = await user.isPasswordCorrect(oldPasswordd)
 
     if (!isPasswordCorrect) {
-        throw new ApiError(400,"Invalid pld Password.")
+        throw new ApiError(400,"Invalid old Password.")
 
     }
 
@@ -286,7 +286,7 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
     }
 
     const user = await User.findByIdAndUpdate(
-        req.user._id,
+        req.user?._id,
         {
                 $set:avatar.url
         },
