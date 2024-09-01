@@ -105,6 +105,8 @@ const loginUser =asyncHandler(async(req,res)=>{
     //password check
     //access and refresh token
     //send cookie
+    console.log("params",req.params);
+    console.log("Body",req.body,req.query);
     const {email,username,password}=req.body
     console.log("hi:",email,username,password)
     if (!(username || email)) {

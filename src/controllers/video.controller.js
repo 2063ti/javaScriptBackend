@@ -10,7 +10,8 @@ import {uploadOnCloudinary} from "../utils/cloudinary.js"
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
     //TODO: get all videos based on query, sort, pagination
-
+    console.log("params",req.params);
+    console.log("Body",req.body,req.query);
     const pageInt = parseInt(page);
     const limitInt = parseInt(limit);
 
@@ -154,72 +155,76 @@ const updateVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
     //TODO: update video details like title, description, thumbnail
     const { title, description } = req.body;
+    console.log(req.body,req.file.path)
+    // const videoLocalPath  = req.files?.videoFile[0]?.path;
+    // if (!videoLocalPath) {
+    //     throw new ApiError(400,"videoFile is Missing.")
+    // }
 
-    const videoLocalPath  = req.files?.videoFile[0]?.path;
-    if (!videoLocalPath) {
-        throw new ApiError(400,"videoFile is Missing.")
-    }
-
-    let thumbnailLocalPath
-    if (req.files && Array.isArray(req.files.thumbnail)  && req.files.thumbnail.length>0) {
-        thumbnailLocalPath=req.files.thumbnail[0].path
-    }
-    if (!videoLocalPath) {
-       throw new ApiError(400,"video file is required.")
-    }
-    if (!thumbnailLocalPath) {
-        throw new ApiError(400,"thumbnail file is required.")
-    }
-
-
-    const videoFile = await uploadOnCloudinary(videoLocalPath )
-    const thumbnail = await uploadOnCloudinary(thumbnailLocalPath)
-
+    // try {  } catch (error) {
+    //     throw new ApiError(400,"Something went wrong.")
+    // }
+        let thumbnailLocalPath
+        // if (req.file && Array.isArray(req.file)  && req.file.length>0) {
+        //     thumbnailLocalPath=req.file?.path
+        // }
+        thumbnailLocalPath  = req.file.path
+        // if (!videoLocalPath) {
+        //    throw new ApiError(400,"video file is required.")
+        // }
+        console.log(thumbnailLocalPath)
+        if (!thumbnailLocalPath) {
+            throw new ApiError(400,"thumbnail file is required1.")
+        }
     
-    if (!videoFile) {
-        throw new ApiError(400,"Avatar file is required.")
-    }
-    if (!thumbnail) {
-        throw new ApiError(400,"thumbnail file is required.")
-    }
-    if (!title) {
-        throw new ApiError(400,"title is required.")
-    }
-    if (!description) {
-        throw new ApiError(400,"description file is required.")
-    }
-    // || typeof duration === 'undefined' || duration === null
-    console.log("hi",videoFile)
-    const duration = videoFile.duration
-    console.log(duration)
-    if (!duration) {
-        throw new ApiError(400,"duration file is required.")
-    }
-
-    const updatedVideo = await Video.findByIdAndUpdate(
-        videoId,
-        {
-            title,
-            description,
-            videoFile: videoFile.url,
-            thumbnail: thumbnail.url,
-            duration
-        },
-        { new: true }
-    );
-
-    if (!updatedVideo) {
-        throw new ApiError(404, "Video not found.");
-    }
-
-
-
-    return res.
-    status(200)
-    .json(
-        new  ApiResponse(200,updateVideo,"videoFile  is updated SuccessFully.")
-    )
-
+    
+        // const videoFile = await uploadOnCloudinary(videoLocalPath )
+        const thumbnail = await uploadOnCloudinary(thumbnailLocalPath)
+    
+        
+        // if (!videoFile) {
+        //     throw new ApiError(400,"Avatar file is required.")
+        // }
+        if (!thumbnail) {
+            throw new ApiError(400,"thumbnail file is required.")
+        }
+        if (!title) {
+            throw new ApiError(400,"title is required.")
+        }
+        if (!description) {
+            throw new ApiError(400,"description file is required.")
+        }
+        // || typeof duration === 'undefined' || duration === null
+        // console.log("hi",videoFile)
+        // const duration = videoFile.duration
+        // console.log(duration)
+        // if (!duration) {
+        //     throw new ApiError(400,"duration file is required.")
+        // }
+    
+        const updatedVideo = await Video.findByIdAndUpdate(
+            videoId,
+            {
+                title,
+                description,
+                thumbnail: thumbnail.url,
+            },
+            { new: true }
+        );
+    
+        if (!updatedVideo) {
+            throw new ApiError(404, "Video not found.");
+        }
+    
+    
+    
+        return res.
+        status(200)
+        .json(
+            new  ApiResponse(200,updateVideo,"videoFile  is updated SuccessFully.")
+        )
+    
+  
 })
 
 const deleteVideo = asyncHandler(async (req, res) => {
