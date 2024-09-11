@@ -63,7 +63,7 @@ const getPlaylistById = asyncHandler(async (req, res) => {
     const {playlistId} = req.params
     //TODO: get playlist by id
     // console.log(playlistId)
-    if (!isValidObjectId(playlistId)) {
+    if (!playlistId) {
         throw new ApiError(400, 'Invalid playlist ID');
     }
 
