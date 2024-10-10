@@ -30,7 +30,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 
         console.log(comments)
         // Send the response with the comments and pagination info
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             data: comments,
             pagination: {
@@ -40,7 +40,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
             },
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to fetch comments', error: error.message });
+        return res.status(500).json({ success: false, message: 'Failed to fetch comments', error: error.message });
     }
 
 
